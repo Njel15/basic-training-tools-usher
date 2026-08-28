@@ -157,7 +157,7 @@ export default function AdminDashboard({
           <form className="event-form" onSubmit={createNewEvent}>
             <label className="wide">
               <span>Nama event</span>
-              <input name="title" placeholder="Contoh: Refreshment Usher 2027" required minLength={3} maxLength={120} />
+              <input name="title" required minLength={3} maxLength={120} />
             </label>
             <label>
               <span>Tanggal</span>
@@ -169,7 +169,7 @@ export default function AdminDashboard({
             </label>
             <label className="wide">
               <span>Lokasi</span>
-              <input name="location" placeholder="Contoh: Main Hall" maxLength={100} />
+              <input name="location" maxLength={100} />
             </label>
             <button type="submit" disabled={isSaving}>
               {isSaving ? 'Menyimpan…' : 'Buat event'} <span>＋</span>
