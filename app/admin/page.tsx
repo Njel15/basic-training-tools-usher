@@ -11,12 +11,12 @@ export default async function AdminPage() {
     return (
       <main className="access-page">
         <div className="access-card">
-          <span className="brand-mark dark-mark">UE</span>
+          <p className="access-brand">Usher Development</p>
           <p className="eyebrow">AKSES DITOLAK</p>
           <h1>Akun ini bukan admin.</h1>
           <p>
             Anda sudah masuk sebagai {user.email}, tetapi akun tersebut tidak
-            terdaftar sebagai pengelola Usher Event.
+            terdaftar sebagai pengelola Usher Development.
           </p>
           <a href={chatGPTSignOutPath('/admin')}>Keluar dan ganti akun</a>
         </div>
