@@ -44,8 +44,11 @@ button,a{touch-action:manipulation}
 .values-card{background:var(--green);color:white}
 .value-list span{border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.86)}
 .content-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(400px,.75fr);align-items:start;gap:42px;padding:64px clamp(22px,5vw,72px) 90px}
+.content-grid.event-choice,.content-grid.event-selected{grid-template-columns:1fr}
+.event-choice .event-column{width:min(900px,100%);justify-self:center}
 .event-column{min-width:0}
-.public-attendance{grid-column:1/-1;min-width:0}
+.event-selected .checkin-panel{position:static;width:min(680px,100%);justify-self:center}
+.public-attendance{grid-column:1/-1;width:min(900px,100%);min-width:0;justify-self:center}
 .section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:28px}
 .section-heading h2,.panel-heading h2{margin:0;font-size:clamp(32px,4vw,50px);line-height:1;letter-spacing:-.05em}
 .section-heading>span{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.6);color:#728078;font-size:10px}
@@ -65,7 +68,13 @@ button,a{touch-action:manipulation}
 .event-count{display:grid;place-items:center;min-width:62px;color:var(--green);font-size:25px;font-weight:800}
 .event-count small{font-size:9px;color:#849087;font-weight:650}
 .checkin-panel{position:sticky;top:24px;padding:38px;border:1px solid var(--line);border-radius:16px;background:var(--paper);box-shadow:0 22px 70px rgba(27,53,44,.1)}
-.panel-heading>p:last-child{margin:12px 0 0;color:var(--muted);font-size:13px}
+.panel-heading-row{display:flex;align-items:start;justify-content:space-between;gap:18px}
+.panel-heading-row .eyebrow{margin-bottom:0}
+.panel-heading>p{margin:12px 0 0;color:var(--muted);font-size:13px}
+.selected-event-details{margin-top:14px;padding:12px 14px;display:grid;gap:4px;border:1px solid var(--line);border-radius:8px;background:#f1f6f2;color:#718078;font-size:10px}
+.event-switch-button{min-height:auto!important;padding:0!important;border:0!important;background:transparent!important;color:var(--green)!important;font-size:10px!important;font-weight:800!important;box-shadow:none!important;white-space:nowrap}
+.event-switch-button:hover{background:transparent!important;transform:none!important;text-decoration:underline}
+.success-card .success-switch{margin-top:16px;display:block;width:100%;text-align:center}
 .attendance-form{margin-top:34px;display:grid;gap:20px}
 .attendance-form label>span,.event-form label>span{display:block;margin-bottom:8px;font-size:11px;font-weight:800}
 em{font-style:normal;color:#d65f40}
@@ -157,7 +166,7 @@ tbody tr:last-child td{border-bottom:0}
   .purpose-section article{padding-top:42px;padding-bottom:42px}.mission-layout{grid-template-columns:1fr;gap:28px}.mission-layout h2{font-size:66px}
   .content-grid{padding-top:44px}.section-heading{align-items:start;flex-direction:column}
   .event-card{grid-template-columns:60px minmax(0,1fr)}.event-date{height:60px}.event-count{grid-column:2;display:flex;justify-content:start;gap:5px;font-size:14px}
-  .checkin-panel{padding:26px}.attendee-row{grid-template-columns:28px minmax(0,1fr)}.attendee-row time{grid-column:2}
+  .checkin-panel{padding:26px}.panel-heading-row{align-items:center}.attendee-row{grid-template-columns:28px minmax(0,1fr)}.attendee-row time{grid-column:2}
   .admin-sidebar{padding:20px}.admin-user b{max-width:170px}
   .admin-main{padding:35px 16px 70px}.admin-header{align-items:start;flex-direction:column}
   .admin-card{padding:20px}.event-form{grid-template-columns:1fr}.event-form .wide,.event-form button{grid-column:1}
