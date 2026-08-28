@@ -43,12 +43,11 @@ button,a{touch-action:manipulation}
 .mission-card{border-right:1px solid var(--line)}
 .mission-layout{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:clamp(34px,5vw,72px)}
 .mission-layout h2{margin:0;color:var(--green);font-family:Georgia,"Times New Roman",serif;font-size:clamp(62px,7vw,98px);font-weight:500;line-height:.8;letter-spacing:-.07em}
-.mission-layout ul{margin:0;padding:0;display:grid;gap:8px;list-style:none}
-.mission-layout li{display:flex;align-items:baseline;gap:12px;color:#5f493e;font-size:clamp(18px,2.2vw,28px);font-weight:500}
-.mission-layout li::before{content:"—";color:#977956;font-size:13px}
+.mission-list,.value-list{display:flex;flex-wrap:wrap;gap:10px}
+.mission-list span,.value-list span{padding:10px 13px;border-radius:999px;font-size:clamp(11px,1.4vw,16px);font-weight:700;letter-spacing:.02em}
+.mission-list span{border:1px solid #c9d0ca;color:#5f493e;background:white}
 .values-card{background:var(--green);color:white}
-.value-list{display:flex;flex-wrap:wrap;gap:10px}
-.value-list span{padding:10px 13px;border:1px solid rgba(255,255,255,.2);border-radius:999px;color:rgba(255,255,255,.86);font-size:clamp(11px,1.4vw,16px);font-weight:850;letter-spacing:.04em}
+.value-list span{border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.86)}
 .content-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(400px,.75fr);align-items:start;gap:42px;padding:64px clamp(22px,5vw,72px) 90px}
 .event-column{min-width:0}
 .public-attendance{grid-column:1/-1;min-width:0}
@@ -161,7 +160,7 @@ tbody tr:last-child td{border-bottom:0}
 @media(max-width:620px){
   .public-nav{height:68px}.brand>span:last-child{display:none}.live-badge{display:none}
   .public-hero{min-height:auto;padding-top:58px;padding-bottom:58px;gap:34px}.vision-statement{font-size:39px;line-height:1.04}
-  .purpose-section article{padding-top:42px;padding-bottom:42px}.mission-layout{grid-template-columns:1fr;gap:28px}.mission-layout h2{font-size:66px}.mission-layout ul{gap:10px}
+  .purpose-section article{padding-top:42px;padding-bottom:42px}.mission-layout{grid-template-columns:1fr;gap:28px}.mission-layout h2{font-size:66px}
   .content-grid{padding-top:44px}.section-heading{align-items:start;flex-direction:column}
   .event-card{grid-template-columns:60px minmax(0,1fr)}.event-date{height:60px}.event-count{grid-column:2;display:flex;justify-content:start;gap:5px;font-size:14px}
   .checkin-panel{padding:26px}.attendee-row{grid-template-columns:28px minmax(0,1fr)}.attendee-row time{grid-column:2}
