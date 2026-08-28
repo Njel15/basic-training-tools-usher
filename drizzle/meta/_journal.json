@@ -8,6 +8,13 @@
       "when": 1787929820131,
       "tag": "0000_loose_doctor_doom",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787931434628,
+      "tag": "0001_majestic_mandroid",
+      "breakpoints": true
     }
   ]
 }
