@@ -152,8 +152,7 @@ export default function Home() {
     <main className="public-page">
       <header className="public-nav">
         <a className="brand brand-dark" href="#top">
-          <span className="brand-mark">UE</span>
-          <span>Usher Event</span>
+          <span>Usher Development</span>
         </a>
         <div className="nav-actions">
           <span className="live-badge dark"><i /> Sistem aktif</span>
