@@ -54,7 +54,7 @@ export default function Home() {
   const [result, setResult] = useState<CheckInResult | null>(null);
 
   const selectedEvent = useMemo(
-    () => events.find((event) => event.id === selectedEventId) ?? events[0],
+    () => events.find((event) => event.id === selectedEventId),
     [events, selectedEventId],
   );
 
@@ -75,14 +75,17 @@ export default function Home() {
       .then((data: { events?: EventRecord[] }) => {
         const nextEvents = data.events ?? [];
         setEvents(nextEvents);
-        if (nextEvents[0]) setSelectedEventId(nextEvents[0].id);
       })
       .catch(() => setError('Daftar event belum dapat dimuat.'))
       .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
-    if (selectedEvent?.id) loadAttendance(selectedEvent.id);
+    if (selectedEvent?.id) {
+      loadAttendance(selectedEvent.id);
+    } else {
+      setAttendance([]);
+    }
   }, [selectedEvent?.id, loadAttendance]);
 
   useEffect(() => {
@@ -194,8 +197,8 @@ export default function Home() {
         </article>
       </section>
 
-      <section className="content-grid">
-        <div className="event-column">
+      <section className={selectedEvent ? 'content-grid event-selected' : 'content-grid event-choice'}>
+        {!selectedEvent && <div className="event-column">
           <div className="section-heading">
             <div>
               <p className="eyebrow">EVENT AKTIF</p>
@@ -242,9 +245,9 @@ export default function Home() {
             </div>
           )}
 
-        </div>
+        </div>}
 
-        <aside className="checkin-panel">
+        {selectedEvent && <aside className="checkin-panel" id="check-in">
           {result ? (
             <div className="success-card" role="status">
               <span className="success-mark">✓</span>
@@ -257,13 +260,40 @@ export default function Home() {
               <button type="button" onClick={() => setResult(null)}>
                 Absensi peserta lain <span>→</span>
               </button>
+              <button
+                type="button"
+                className="event-switch-button success-switch"
+                onClick={() => {
+                  setSelectedEventId('');
+                  setResult(null);
+                  setError('');
+                }}
+              >
+                Pilih event lain
+              </button>
             </div>
           ) : (
             <>
               <div className="panel-heading">
-                <p className="eyebrow">FORM KEHADIRAN</p>
+                <div className="panel-heading-row">
+                  <p className="eyebrow">FORM KEHADIRAN</p>
+                  <button
+                    type="button"
+                    className="event-switch-button"
+                    onClick={() => {
+                      setSelectedEventId('');
+                      setError('');
+                    }}
+                  >
+                    ← Ganti event
+                  </button>
+                </div>
                 <h2>Check-in event</h2>
-                <p>{selectedEvent ? selectedEvent.title : 'Pilih event terlebih dahulu.'}</p>
+                <p><b>{selectedEvent.title}</b></p>
+                <div className="selected-event-details">
+                  <span>{formatEventDate(selectedEvent.eventDate)} · {selectedEvent.startTime} WIB</span>
+                  <span>{selectedEvent.location}</span>
+                </div>
               </div>
               <form className="attendance-form" onSubmit={handleSubmit}>
                 <label>
@@ -307,7 +337,7 @@ export default function Home() {
               </form>
             </>
           )}
-        </aside>
+        </aside>}
 
         {selectedEvent && (
           <section className="public-attendance" aria-labelledby="attendance-title">
