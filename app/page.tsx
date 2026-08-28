@@ -162,9 +162,8 @@ export default function Home() {
         <div className="hero-main">
           <p className="eyebrow lime">OUR VISION</p>
           <p className="vision-statement">
-            Welcoming and Caring the People of <strong>GOD</strong> to{' '}
-            <strong>CONNECT</strong> with the <strong>CHURCH</strong> and{' '}
-            <strong>ENCOUNTER HIS PRESENCE</strong>
+            Welcoming and Caring the People of GOD to CONNECT with the CHURCH
+            and ENCOUNTER HIS PRESENCE
           </p>
         </div>
         <div className="clock-card" aria-live="polite">
@@ -181,10 +180,10 @@ export default function Home() {
           <div className="mission-layout">
             <h2>HELP</h2>
             <ul>
-              <li><span>H</span> Hospitality</li>
-              <li><span>E</span> Engagement</li>
-              <li><span>L</span> Love</li>
-              <li><span>P</span> Pray</li>
+              <li>Hospitality</li>
+              <li>Engagement</li>
+              <li>Love</li>
+              <li>Pray</li>
             </ul>
           </div>
         </article>
