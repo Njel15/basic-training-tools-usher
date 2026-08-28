@@ -7,10 +7,10 @@ export const metadata: Metadata = {
       'https://usher-gmscentralpark.web.id',
   ),
   title: 'Usher Event · Absensi Training',
-  description: 'Absensi online dan arsip event training usher tahunan.',
+  description: 'Servolution - Usher GMS Central Park',
   openGraph: {
     title: 'Usher Event · Absensi Training',
-    description: 'Absensi online dan arsip event training usher tahunan.',
+    description: 'Servolution - Usher GMS Central Park',
     type: 'website',
     locale: 'id_ID',
     images: [{ url: '/og-usher-crowd.jpg', width: 1200, height: 675, alt: 'Usher Crowd Management' }],
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Usher Event · Absensi Training',
-    description: 'Absensi online dan arsip event training usher tahunan.',
+    description: 'Servolution - Usher GMS Central Park',
     images: ['/og-usher-crowd.jpg'],
   },
 };
