@@ -157,7 +157,6 @@ export default function Home() {
         </a>
         <div className="nav-actions">
           <span className="live-badge dark"><i /> Sistem aktif</span>
-          <a className="admin-link" href="/admin">Admin</a>
         </div>
       </header>
 
@@ -165,8 +164,8 @@ export default function Home() {
         <div className="hero-main">
           <p className="eyebrow lime">Our vision</p>
           <p className="vision-statement">
-            Welcoming and caring the people of God to connect with the church
-            and encounter His presence
+            <span>Welcoming and Caring The People of God</span>
+            <em>to Connect with The Church and Encounter His Presence.</em>
           </p>
         </div>
       </section>
