@@ -160,10 +160,10 @@ export default function Home() {
 
       <section className="public-hero" id="top">
         <div className="hero-main">
-          <p className="eyebrow lime">OUR VISION</p>
+          <p className="eyebrow lime">Our vision</p>
           <p className="vision-statement">
-            Welcoming and Caring the People of GOD to CONNECT with the CHURCH
-            and ENCOUNTER HIS PRESENCE
+            Welcoming and caring the people of God to connect with the church
+            and encounter His presence
           </p>
         </div>
         <div className="clock-card" aria-live="polite">
@@ -176,26 +176,26 @@ export default function Home() {
 
       <section className="purpose-section" aria-label="Mission and values">
         <article className="mission-card">
-          <p className="eyebrow">OUR MISSION</p>
+          <p className="eyebrow">Our mission</p>
           <div className="mission-layout">
             <h2>HELP</h2>
-            <ul>
-              <li>Hospitality</li>
-              <li>Engagement</li>
-              <li>Love</li>
-              <li>Pray</li>
-            </ul>
+            <div className="mission-list">
+              <span>Hospitality</span>
+              <span>Engagement</span>
+              <span>Love</span>
+              <span>Pray</span>
+            </div>
           </div>
         </article>
 
         <article className="values-card">
-          <p className="eyebrow lime">OUR VALUE</p>
+          <p className="eyebrow lime">Our value</p>
           <div className="value-list">
-            <span>SERVANT</span>
-            <span>TRUSTWORTHY</span>
-            <span>ALL OUT</span>
-            <span>REGENERATION</span>
-            <span>SOULS</span>
+            <span>Servant</span>
+            <span>Trustworthy</span>
+            <span>All out</span>
+            <span>Regeneration</span>
+            <span>Souls</span>
           </div>
         </article>
       </section>
