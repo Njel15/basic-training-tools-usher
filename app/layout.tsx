@@ -4,7 +4,7 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.SITE_URL ??
-      'https://basic-training-tools-usher.lie-angelica1525.chatgpt.site',
+      'https://usher-event.lie-angelica1525.chatgpt.site',
   ),
   title: 'Usher Event · Absensi Training',
   description: 'Absensi online dan arsip event training usher tahunan.',
