@@ -162,7 +162,7 @@ export default function Home() {
 
       <section className="public-hero" id="top">
         <div className="hero-main">
-          <p className="eyebrow lime">Our vision</p>
+          <p className="eyebrow lime">VISION</p>
           <p className="vision-statement">
             <span>Welcoming and Caring The People of God</span>
             <em>to Connect with The Church and Encounter His Presence.</em>
@@ -172,7 +172,7 @@ export default function Home() {
 
       <section className="purpose-section" aria-label="Mission and values">
         <article className="mission-card">
-          <p className="eyebrow">Our mission</p>
+          <p className="eyebrow">MISSION</p>
           <div className="mission-layout">
             <h2>HELP</h2>
             <div className="mission-list">
@@ -185,7 +185,7 @@ export default function Home() {
         </article>
 
         <article className="values-card">
-          <p className="eyebrow lime">Our value</p>
+          <p className="eyebrow lime">VALUE</p>
           <div className="value-list">
             <span>Servant</span>
             <span>Trustworthy</span>
