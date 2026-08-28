@@ -123,8 +123,7 @@ export default function AdminDashboard({
     <main className="admin-page">
       <aside className="admin-sidebar">
         <a className="brand" href="/">
-          <span className="brand-mark">UE</span>
-          <span>Usher Event</span>
+          <span>Usher Development</span>
         </a>
         <nav>
           <a className="active" href="#events">Event &amp; arsip</a>
