@@ -1,28 +1,101 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+
+type EventRecord = {
+  id: string;
+  title: string;
+  eventDate: string;
+  startTime: string;
+  location: string;
+  status: 'active' | 'closed';
+  attendanceCount: number;
+};
+
+type PublicAttendance = {
+  id: string;
+  name: string;
+  nij: string;
+  checkedInAt: string;
+};
 
 type CheckInResult = {
   name: string;
-  session: string;
+  eventTitle: string;
   time: string;
 };
 
+function formatEventDate(value: string) {
+  return new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Asia/Jakarta',
+  }).format(new Date(`${value}T12:00:00+07:00`));
+}
+
+function formatCheckInTime(value: string) {
+  return new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Jakarta',
+  }).format(new Date(value));
+}
+
 export default function Home() {
+  const [events, setEvents] = useState<EventRecord[]>([]);
+  const [selectedEventId, setSelectedEventId] = useState('');
+  const [attendance, setAttendance] = useState<PublicAttendance[]>([]);
+  const [now, setNow] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<CheckInResult | null>(null);
-  const [todayTotal, setTodayTotal] = useState<number | null>(null);
+
+  const selectedEvent = useMemo(
+    () => events.find((event) => event.id === selectedEventId),
+    [events, selectedEventId],
+  );
+
+  const loadAttendance = useCallback(async (eventId: string) => {
+    if (!eventId) return setAttendance([]);
+    try {
+      const response = await fetch(`/api/events/${eventId}/attendance`);
+      const data = (await response.json()) as { attendance?: PublicAttendance[] };
+      setAttendance(data.attendance ?? []);
+    } catch {
+      setAttendance([]);
+    }
+  }, []);
 
   useEffect(() => {
-    fetch('/api/attendance')
+    fetch('/api/events')
       .then((response) => response.json())
-      .then((data: { total?: number }) => setTodayTotal(data.total ?? 0))
-      .catch(() => setTodayTotal(null));
+      .then((data: { events?: EventRecord[] }) => {
+        const nextEvents = data.events ?? [];
+        setEvents(nextEvents);
+      })
+      .catch(() => setError('Daftar event belum dapat dimuat.'))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (selectedEvent?.id) {
+      loadAttendance(selectedEvent.id);
+    } else {
+      setAttendance([]);
+    }
+  }, [selectedEvent?.id, loadAttendance]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(timer);
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!selectedEvent) return;
     setError('');
     setIsSubmitting(true);
     const form = event.currentTarget;
@@ -34,17 +107,21 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           fullName: data.get('name'),
-          participantId: data.get('participantId'),
-          team: data.get('team'),
-          session: data.get('session'),
-          consent: data.get('consent') === 'on',
+          nij: data.get('nij'),
+          eventId: selectedEvent.id,
         }),
       });
       const payload = (await response.json()) as CheckInResult & { message?: string };
       if (!response.ok) throw new Error(payload.message || 'Absensi belum berhasil disimpan.');
-
       setResult(payload);
-      setTodayTotal((current) => (current ?? 0) + 1);
+      setEvents((current) =>
+        current.map((item) =>
+          item.id === selectedEvent.id
+            ? { ...item, attendanceCount: item.attendanceCount + 1 }
+            : item,
+        ),
+      );
+      await loadAttendance(selectedEvent.id);
       form.reset();
     } catch (submissionError) {
       setError(
@@ -57,129 +134,232 @@ export default function Home() {
     }
   }
 
+  const liveDate = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Asia/Jakarta',
+  }).format(now);
+  const liveTime = new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'Asia/Jakarta',
+  }).format(now);
+
   return (
-    <main className="site-shell">
-      <section className="hero" aria-labelledby="page-title">
-        <nav className="topbar" aria-label="Navigasi utama">
-          <a className="brand" href="#top" aria-label="Basic Training & Tools Usher">
-            <span className="brand-mark" aria-hidden="true">BT</span>
-            <span>Usher Development</span>
-          </a>
-          <span className="live-badge"><i /> Absensi aktif</span>
-        </nav>
-
-        <div className="hero-copy" id="top">
-          <p className="eyebrow">LEARNING SESSION · 2026</p>
-          <h1 id="page-title">Basic Training <span>&amp;</span><br />Tools Usher</h1>
-          <p className="hero-note">
-            Catat kehadiranmu. Siapkan hati untuk melayani dengan sigap, hangat,
-            dan penuh perhatian.
-          </p>
-          <div className="session-meta">
-            <div>
-              <span className="meta-icon">01</span>
-              <p><b>Hari ini</b><small>Check-in dibuka</small></p>
-            </div>
-            <div>
-              <span className="meta-icon">02</span>
-              <p>
-                <b>{todayTotal === null ? 'Database online' : `${todayTotal} peserta hadir`}</b>
-                <small>Tersimpan otomatis</small>
-              </p>
-            </div>
-          </div>
+    <main className="public-page">
+      <header className="public-nav">
+        <a className="brand brand-dark" href="#top">
+          <span>Usher Development</span>
+        </a>
+        <div className="nav-actions">
+          <span className="live-badge dark"><i /> Sistem aktif</span>
         </div>
+      </header>
 
-        <div className="steps" aria-label="Proses absensi">
-          <span className={!result ? 'active' : ''}>01 <b>Isi data</b></span>
-          <span className={result ? 'active' : ''}>02 <b>Konfirmasi</b></span>
-          <span className={result ? 'active' : ''}>03 <b>Selesai</b></span>
+      <section className="public-hero" id="top">
+        <div className="hero-main">
+          <p className="eyebrow lime">VISION</p>
+          <p className="vision-statement">
+            <span>Welcoming and Caring The People of God</span>
+            <em>to Connect with The Church and Encounter His Presence.</em>
+          </p>
         </div>
       </section>
 
-      <section className="form-panel" aria-labelledby="form-title">
-        {result ? (
-          <div className="success-card" role="status" aria-live="polite">
-            <span className="success-mark" aria-hidden="true">✓</span>
-            <p className="eyebrow">KEHADIRAN TERCATAT</p>
-            <h2 id="form-title">Sampai jumpa<br />di dalam kelas.</h2>
-            <p className="success-greeting">
-              Terima kasih, <b>{result.name}</b>. Check-in untuk <b>{result.session}</b>
-              {' '}berhasil disimpan pada pukul {result.time} WIB.
-            </p>
-            <div className="success-detail">
-              <span>Status <b>Hadir</b></span>
-              <span>Penyimpanan <b>Database online</b></span>
+      <section className="purpose-section" aria-label="Mission and values">
+        <article className="mission-card">
+          <p className="eyebrow">MISSION</p>
+          <div className="mission-layout">
+            <h2>HELP</h2>
+            <div className="mission-list">
+              <span>Hospitality</span>
+              <span>Engagement</span>
+              <span>Love</span>
+              <span>Pray</span>
             </div>
-            <button type="button" className="secondary-button" onClick={() => setResult(null)}>
-              Isi absensi peserta lain <span aria-hidden="true">↗</span>
-            </button>
           </div>
-        ) : (
-          <>
-            <div className="panel-heading">
-              <p className="eyebrow">FORM KEHADIRAN</p>
-              <h2 id="form-title">Siap untuk belajar?</h2>
-              <p>Isi data di bawah dengan benar untuk mencatat kehadiranmu.</p>
-            </div>
+        </article>
 
-            <form className="attendance-form" onSubmit={handleSubmit}>
-              <label>
-                <span>Nama lengkap <em>*</em></span>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Masukkan nama lengkap"
-                  autoComplete="name"
-                  minLength={3}
-                  maxLength={100}
-                  required
-                />
-              </label>
-              <div className="field-grid">
+        <article className="values-card">
+          <p className="eyebrow lime">VALUE</p>
+          <div className="value-list">
+            <span>Servant</span>
+            <span>Trustworthy</span>
+            <span>All out</span>
+            <span>Regeneration</span>
+            <span>Souls</span>
+          </div>
+        </article>
+      </section>
+
+      <section className={selectedEvent ? 'content-grid event-selected' : 'content-grid event-choice'}>
+        {!selectedEvent && <div className="event-column">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">EVENT AKTIF</p>
+              <h2>Pilih event usher</h2>
+            </div>
+            <span>{events.length} event tersedia</span>
+          </div>
+
+          {isLoading ? (
+            <div className="empty-state">Memuat event…</div>
+          ) : events.length === 0 ? (
+            <div className="empty-state">
+              <b>Belum ada event aktif.</b>
+              <span>Admin akan menambahkan event berikutnya di sini.</span>
+            </div>
+          ) : (
+            <div className="event-list" role="radiogroup" aria-label="Pilih event">
+              {events.map((event) => (
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={selectedEvent?.id === event.id}
+                  className={selectedEvent?.id === event.id ? 'event-card selected' : 'event-card'}
+                  key={event.id}
+                  onClick={() => {
+                    setSelectedEventId(event.id);
+                    setResult(null);
+                    setError('');
+                  }}
+                >
+                  <span className="event-date">
+                    <b>{new Date(`${event.eventDate}T12:00:00+07:00`).getDate()}</b>
+                    <small>{new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(new Date(`${event.eventDate}T12:00:00+07:00`))}</small>
+                  </span>
+                  <span className="event-info">
+                    <small>CHECK-IN DIBUKA</small>
+                    <strong>{event.title}</strong>
+                    <em>{formatEventDate(event.eventDate)} · {event.startTime} WIB</em>
+                    <em>{event.location}</em>
+                  </span>
+                  <span className="event-count">{event.attendanceCount}<small>hadir</small></span>
+                </button>
+              ))}
+            </div>
+          )}
+
+        </div>}
+
+        {selectedEvent && <aside className="checkin-panel" id="check-in">
+          {result ? (
+            <div className="success-card" role="status">
+              <span className="success-mark">✓</span>
+              <p className="eyebrow">KEHADIRAN TERCATAT</p>
+              <h2>Sampai jumpa<br />di event.</h2>
+              <p className="success-greeting">
+                Terima kasih, <b>{result.name}</b>. Check-in untuk
+                {' '}<b>{result.eventTitle}</b> tersimpan pukul {result.time} WIB.
+              </p>
+              <button type="button" onClick={() => setResult(null)}>
+                Absensi peserta lain <span>→</span>
+              </button>
+              <button
+                type="button"
+                className="event-switch-button success-switch"
+                onClick={() => {
+                  setSelectedEventId('');
+                  setResult(null);
+                  setError('');
+                }}
+              >
+                Pilih event lain
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="panel-heading">
+                <div className="panel-heading-row">
+                  <p className="eyebrow">FORM KEHADIRAN</p>
+                  <button
+                    type="button"
+                    className="event-switch-button"
+                    onClick={() => {
+                      setSelectedEventId('');
+                      setError('');
+                    }}
+                  >
+                    ← Ganti event
+                  </button>
+                </div>
+                <h2>Check-in event</h2>
+                <p><b>{selectedEvent.title}</b></p>
+                <div className="selected-event-details">
+                  <span>{formatEventDate(selectedEvent.eventDate)} · {selectedEvent.startTime} WIB</span>
+                  <span>{selectedEvent.location}</span>
+                </div>
+              </div>
+              <form className="attendance-form" onSubmit={handleSubmit}>
                 <label>
-                  <span>Nomor peserta / ID <em>*</em></span>
+                  <span>Nama lengkap <em>*</em></span>
                   <input
                     type="text"
-                    name="participantId"
-                    placeholder="Contoh: USH-024"
-                    minLength={2}
-                    maxLength={40}
+                    name="name"
+                    autoComplete="name"
+                    minLength={3}
+                    maxLength={100}
                     required
+                    disabled={!selectedEvent}
                   />
                 </label>
                 <label>
-                  <span>Tim / Area pelayanan <em>*</em></span>
-                  <select name="team" defaultValue="" required>
-                    <option value="" disabled>Pilih area</option>
-                    <option>Lobby &amp; Welcome</option>
-                    <option>Auditorium</option>
-                    <option>Information Desk</option>
-                    <option>Safety &amp; Support</option>
-                  </select>
+                  <span>NIJ · Nomor Induk Jemaat <em>*</em></span>
+                  <input
+                    type="text"
+                    name="nij"
+                    inputMode="numeric"
+                    pattern="[0-9]+"
+                    minLength={2}
+                    maxLength={30}
+                    required
+                    disabled={!selectedEvent}
+                  />
                 </label>
-              </div>
-              <fieldset>
-                <legend>Sesi training <em>*</em></legend>
-                <div className="session-options">
-                  <label><input type="radio" name="session" value="Basic Training" required /> Basic Training</label>
-                  <label><input type="radio" name="session" value="Tools Usher" required /> Tools Usher</label>
+                <div className="locked-time">
+                  <span>Waktu otomatis</span>
+                  <b>{liveTime} WIB</b>
+                  <small>{liveDate}</small>
                 </div>
-              </fieldset>
-              <label className="consent">
-                <input type="checkbox" name="consent" required />
-                <span>Saya memastikan data yang diisi sudah benar.</span>
-              </label>
-              {error && <p className="error-message" role="alert">{error}</p>}
-              <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Menyimpan…' : 'Catat kehadiran'}
-                <span aria-hidden="true">{isSubmitting ? '·' : '→'}</span>
-              </button>
-              <p className="privacy-note">
-                Data tersimpan aman untuk kebutuhan administrasi training.
-              </p>
-            </form>
-          </>
+                {error && <p className="error-message" role="alert">{error}</p>}
+                <button type="submit" disabled={!selectedEvent || isSubmitting}>
+                  {isSubmitting ? 'Menyimpan…' : 'Submit Kehadiran'}
+                  <span>{isSubmitting ? '·' : '→'}</span>
+                </button>
+                <p className="privacy-note">
+                  Nama belakang dan NIJ akan disensor pada daftar publik.
+                </p>
+              </form>
+            </>
+          )}
+        </aside>}
+
+        {selectedEvent && (
+          <section className="public-attendance" aria-labelledby="attendance-title">
+            <div className="section-heading compact">
+              <div>
+                <p className="eyebrow">LIVE ATTENDANCE</p>
+                <h2 id="attendance-title">Sudah hadir</h2>
+              </div>
+              <span>Data publik disensor</span>
+            </div>
+            {attendance.length ? (
+              <div className="attendee-list">
+                {attendance.map((person, index) => (
+                  <div className="attendee-row" key={person.id}>
+                    <span className="row-number">{String(index + 1).padStart(2, '0')}</span>
+                    <span><b>{person.name}</b><small>NIJ {person.nij}</small></span>
+                    <time>{formatCheckInTime(person.checkedInAt)} WIB</time>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state small">Belum ada peserta yang check-in.</div>
+            )}
+          </section>
         )}
       </section>
     </main>

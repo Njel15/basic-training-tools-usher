@@ -1,18 +1,19 @@
-# Basic Training & Tools Usher
+# Usher Event
 
-Aplikasi absensi online untuk peserta sesi **Basic Training** dan **Tools Usher**.
-Data kehadiran tersimpan langsung ke database Cloudflare D1, tanpa spreadsheet
-atau proses ekspor Excel.
+Aplikasi absensi dan arsip event training usher tahunan. Data kehadiran
+tersimpan langsung ke database Cloudflare D1 tanpa spreadsheet atau Excel.
 
 ## Fitur
 
-- Form check-in yang responsif untuk ponsel dan desktop
-- Validasi data di browser dan server
-- Pencegahan absensi ganda berdasarkan ID, sesi, dan tanggal
-- Waktu check-in menggunakan zona waktu Asia/Jakarta
-- Jumlah kehadiran hari ini secara otomatis
-- Halaman konfirmasi setelah data berhasil tersimpan
-- Database online D1 dengan migrasi yang ikut tersimpan di repository
+- Pilihan event aktif pada halaman publik
+- Form check-in menggunakan nama lengkap dan NIJ
+- Tanggal dan jam live Asia/Jakarta yang tersimpan otomatis
+- Pencegahan check-in ganda per NIJ dan event
+- Nama dan NIJ disensor pada daftar kehadiran publik
+- Halaman admin terproteksi untuk membuat dan menutup event
+- Arsip event tahunan dengan data kehadiran lengkap
+- Penghapusan absensi hanya tersedia untuk admin
+- Database online D1 dengan migrasi tersimpan di repository
 
 ## Menjalankan secara lokal
 
@@ -42,4 +43,5 @@ pnpm db:generate  # membuat migrasi setelah perubahan skema
 ## Privasi
 
 Nama dan ID peserta hanya digunakan untuk administrasi kehadiran training.
-Aplikasi tidak menampilkan daftar data pribadi peserta kepada publik.
+Aplikasi hanya menampilkan nama dan NIJ yang telah disensor kepada publik.
+Data lengkap dan fungsi penghapusan hanya tersedia di halaman admin.

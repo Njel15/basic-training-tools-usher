@@ -4,22 +4,22 @@ import './globals.css';
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.SITE_URL ??
-      'https://basic-training-tools-usher.lie-angelica1525.chatgpt.site',
+      'https://usher-gmscentralpark.web.id',
   ),
-  title: 'Basic Training & Tools Usher',
-  description: 'Absensi online untuk peserta Basic Training & Tools Usher.',
+  title: 'Usher Event · Absensi Training',
+  description: 'Servolution - Usher GMS Central Park',
   openGraph: {
-    title: 'Basic Training & Tools Usher',
-    description: 'Absensi online untuk peserta Basic Training & Tools Usher.',
+    title: 'Usher Event · Absensi Training',
+    description: 'Servolution - Usher GMS Central Park',
     type: 'website',
     locale: 'id_ID',
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Basic Training & Tools Usher' }],
+    images: [{ url: '/og-usher-crowd.jpg', width: 1200, height: 675, alt: 'Usher Crowd Management' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Basic Training & Tools Usher',
-    description: 'Absensi online untuk peserta Basic Training & Tools Usher.',
-    images: ['/og.jpg'],
+    title: 'Usher Event · Absensi Training',
+    description: 'Servolution - Usher GMS Central Park',
+    images: ['/og-usher-crowd.jpg'],
   },
 };
 
