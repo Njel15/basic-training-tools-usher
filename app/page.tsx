@@ -166,12 +166,6 @@ export default function Home() {
             and encounter His presence
           </p>
         </div>
-        <div className="clock-card" aria-live="polite">
-          <span>WAKTU CHECK-IN · WIB</span>
-          <strong>{liveTime}</strong>
-          <p>{liveDate}</p>
-          <small>Waktu berjalan otomatis dan tidak dapat diubah.</small>
-        </div>
       </section>
 
       <section className="purpose-section" aria-label="Mission and values">

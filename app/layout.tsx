@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     description: 'Absensi online dan arsip event training usher tahunan.',
     type: 'website',
     locale: 'id_ID',
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Usher Event' }],
+    images: [{ url: '/og-usher-crowd.jpg', width: 1200, height: 675, alt: 'Usher Crowd Management' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Usher Event · Absensi Training',
     description: 'Absensi online dan arsip event training usher tahunan.',
-    images: ['/og.jpg'],
+    images: ['/og-usher-crowd.jpg'],
   },
 };
 
