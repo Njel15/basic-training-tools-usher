@@ -160,11 +160,11 @@ export default function Home() {
 
       <section className="public-hero" id="top">
         <div className="hero-main">
-          <p className="eyebrow lime">USHER DEVELOPMENT · EVENT ATTENDANCE</p>
-          <h1>Hadir. Belajar.<br /><span>Melayani.</span></h1>
-          <p className="hero-note">
-            Pilih event yang kamu ikuti, isi nama dan NIJ, lalu kehadiranmu akan
-            tercatat otomatis bersama waktu check-in.
+          <p className="eyebrow lime">OUR VISION</p>
+          <p className="vision-statement">
+            Welcoming and Caring the People of <strong>GOD</strong> to{' '}
+            <strong>CONNECT</strong> with the <strong>CHURCH</strong> and{' '}
+            <strong>ENCOUNTER HIS PRESENCE</strong>
           </p>
         </div>
         <div className="clock-card" aria-live="polite">
@@ -173,6 +173,32 @@ export default function Home() {
           <p>{liveDate}</p>
           <small>Waktu berjalan otomatis dan tidak dapat diubah.</small>
         </div>
+      </section>
+
+      <section className="purpose-section" aria-label="Mission and values">
+        <article className="mission-card">
+          <p className="eyebrow">OUR MISSION</p>
+          <div className="mission-layout">
+            <h2>HELP</h2>
+            <ul>
+              <li><span>H</span> Hospitality</li>
+              <li><span>E</span> Engagement</li>
+              <li><span>L</span> Love</li>
+              <li><span>P</span> Pray</li>
+            </ul>
+          </div>
+        </article>
+
+        <article className="values-card">
+          <p className="eyebrow lime">OUR VALUE</p>
+          <div className="value-list">
+            <span>SERVANT</span>
+            <span>TRUSTWORTHY</span>
+            <span>ALL OUT</span>
+            <span>REGENERATION</span>
+            <span>SOULS</span>
+          </div>
+        </article>
       </section>
 
       <section className="content-grid">
@@ -223,30 +249,6 @@ export default function Home() {
             </div>
           )}
 
-          {selectedEvent && (
-            <section className="public-attendance" aria-labelledby="attendance-title">
-              <div className="section-heading compact">
-                <div>
-                  <p className="eyebrow">LIVE ATTENDANCE</p>
-                  <h2 id="attendance-title">Sudah hadir</h2>
-                </div>
-                <span>Data publik disensor</span>
-              </div>
-              {attendance.length ? (
-                <div className="attendee-list">
-                  {attendance.map((person, index) => (
-                    <div className="attendee-row" key={person.id}>
-                      <span className="row-number">{String(index + 1).padStart(2, '0')}</span>
-                      <span><b>{person.name}</b><small>NIJ {person.nij}</small></span>
-                      <time>{formatCheckInTime(person.checkedInAt)} WIB</time>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="empty-state small">Belum ada peserta yang check-in.</div>
-              )}
-            </section>
-          )}
         </div>
 
         <aside className="checkin-panel">
@@ -276,7 +278,6 @@ export default function Home() {
                   <input
                     type="text"
                     name="name"
-                    placeholder="Contoh: Angelica Lie"
                     autoComplete="name"
                     minLength={3}
                     maxLength={100}
@@ -291,7 +292,6 @@ export default function Home() {
                     name="nij"
                     inputMode="numeric"
                     pattern="[0-9]+"
-                    placeholder="Contoh: 101691"
                     minLength={2}
                     maxLength={30}
                     required
@@ -305,7 +305,7 @@ export default function Home() {
                 </div>
                 {error && <p className="error-message" role="alert">{error}</p>}
                 <button type="submit" disabled={!selectedEvent || isSubmitting}>
-                  {isSubmitting ? 'Menyimpan…' : 'Catat kehadiran'}
+                  {isSubmitting ? 'Menyimpan…' : 'Submit Kehadiran'}
                   <span>{isSubmitting ? '·' : '→'}</span>
                 </button>
                 <p className="privacy-note">
@@ -315,6 +315,31 @@ export default function Home() {
             </>
           )}
         </aside>
+
+        {selectedEvent && (
+          <section className="public-attendance" aria-labelledby="attendance-title">
+            <div className="section-heading compact">
+              <div>
+                <p className="eyebrow">LIVE ATTENDANCE</p>
+                <h2 id="attendance-title">Sudah hadir</h2>
+              </div>
+              <span>Data publik disensor</span>
+            </div>
+            {attendance.length ? (
+              <div className="attendee-list">
+                {attendance.map((person, index) => (
+                  <div className="attendee-row" key={person.id}>
+                    <span className="row-number">{String(index + 1).padStart(2, '0')}</span>
+                    <span><b>{person.name}</b><small>NIJ {person.nij}</small></span>
+                    <time>{formatCheckInTime(person.checkedInAt)} WIB</time>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state small">Belum ada peserta yang check-in.</div>
+            )}
+          </section>
+        )}
       </section>
     </main>
   );
